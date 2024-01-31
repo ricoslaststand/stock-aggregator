@@ -1,7 +1,7 @@
 import axios from 'axios';
 import PromisePool from '@supercharge/promise-pool/dist';
 import yahooFinance from 'yahoo-finance2';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import sleep from 'sleep-promise';
 
 import knex from 'knex'
@@ -24,7 +24,7 @@ const db = knex({
       database : config.POSTGRES_DATABASE,
     },
     pool: { min: 0, max: 7 }
-  });
+});
 
 function getNumberOfDaysAgo(numOfDays: number): Date {
     return dayjs().subtract(numOfDays).startOf('day').toDate()
@@ -60,12 +60,14 @@ function addIndexes(stocks: Stock[]): Stock[] {
 }
 
 async function main(): Promise<void> {
+    // Step 1: Retrieve all stocks
+    // Step 2: Flag stocks that meet conditions
     try {
         const stockSymbols = await retrieveStockSymbols();
         await insertStockSymbols(addIndexes(stockSymbols));
 
-        const startDate = '2023-04-01'
-        const endDate = '2023-04-05'
+        const startDate = '2023-09-01'
+        const endDate = '2024-04-05'
 
         await PromisePool
             .withConcurrency(1)
@@ -131,7 +133,6 @@ async function executeSQLQuery() {
     } catch (e) {
         console.log(e)
     }
-
 }
 
 async function getCalendarEvents(symbol: string) {
