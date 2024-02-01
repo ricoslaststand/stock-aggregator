@@ -10,10 +10,6 @@ class DailyStockPriceRepository {
         this.tableName = 'daily_stock_prices'
     }
 
-    async getPriceChanges(symbol: string, dateFrom: Dayjs, dateTo: Dayjs) {
-        
-    }
-
     async getLastDaysOfPriceChange(date: Dayjs, numDays: number = 30) {
         return await this.db('daily_price_changes')
             .whereRaw('date <= ?', [date])
@@ -24,9 +20,12 @@ class DailyStockPriceRepository {
     async getAvgForLastXDays(numOfDays: number): Promise<number> {
         const result = await this.db(this.tableName)
             .avg('close')
+            .orderBy('date', 'desc')
             .limit(numOfDays)
             .first();
 
         return result?.['close'] || 0
     }
 }
+
+export default DailyStockPriceRepository

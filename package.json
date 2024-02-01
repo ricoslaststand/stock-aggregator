@@ -9,6 +9,7 @@
     "migrate": "NODE_ENV=staging knex migrate:up",
     "lint": "eslint",
     "format": "eslint --fix",
+    "format-staged": "eslint --fix $(git diff --name-only HEAD | xargs)",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky"
   },
