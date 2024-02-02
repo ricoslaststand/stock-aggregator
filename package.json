@@ -11,7 +11,8 @@
     "format": "npx @biomejs/biome check --apply src/**",
     "format-staged": "eslint --fix $(git diff --name-only HEAD | xargs)",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "precommit": "lint-staged"
   },
   "author": "",
   "license": "ISC",
