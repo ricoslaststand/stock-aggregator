@@ -1,7 +1,5 @@
-interface StockFlagChecker {
-
-}
+type StockFlagChecker = {};
 
 type StockInformation = {
-    lastXDays
-}
+	lastXDays;
+};
