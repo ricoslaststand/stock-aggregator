@@ -14,11 +14,23 @@ class StockFlagger {
 
 	async checkAllStocks(): Promise<void> {
 		const stocks = await this.stockRepo.getStocks();
-		const dates = this.generateListOfDates();
+		const [startDate, endDate] = this.generateDateRange();
+		const dates = this.generateListOfDates(startDate, endDate);
 
 		for (const stock of stocks) {
 			const { tickerSymbol } = stock;
+
+			for (const date of dates) {
+			}
 		}
+	}
+
+	private generateDateRange(): [Date, Date] {
+		const today = dayjs(new Date()).startOf("D");
+
+		const startDate = today.clone().subtract(180);
+
+		return [startDate.toDate(), today.toDate()];
 	}
 
 	private generateListOfDates(startDate: Date, endDate: Date): Date[] {

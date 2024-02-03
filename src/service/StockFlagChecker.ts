@@ -1,5 +1,4 @@
-type StockFlagChecker = {};
-
-type StockInformation = {
-	lastXDays;
-};
+export interface IStockFlagChecker {
+	checkFlag(tickerSymbol: string, date: Date): Promise<boolean>;
+	getReason(): string;
+}
