@@ -2,11 +2,12 @@ import dayjs = require("dayjs");
 
 import PriceRepository from "../repository/PriceRepository";
 import StockRepository from "../repository/StockRepository";
+import { IStockFlagChecker } from "./StockFlagChecker";
 
 class StockFlagger {
 	private priceRepo: PriceRepository;
 	private stockRepo: StockRepository;
-	private stockFlags: StockFlagChecker[];
+	private stockFlags: IStockFlagChecker[];
 
 	constructor(priceRepo: PriceRepository) {
 		this.priceRepo = priceRepo;
@@ -21,6 +22,15 @@ class StockFlagger {
 			const { tickerSymbol } = stock;
 
 			for (const date of dates) {
+				let reasons = "";
+
+				for (const stockFlag of this.stockFlags) {
+					const isFlagged = await stockFlag.checkFlag(tickerSymbol, date);
+
+					if (isFlagged) {
+						reasons += stockFlag.getReason();
+					}
+				}
 			}
 		}
 	}
