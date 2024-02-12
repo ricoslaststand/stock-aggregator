@@ -18,11 +18,17 @@ export class CurrDaysGreaterThanPreviousDay implements IStockFlagChecker {
 	}
 
 	public async checkFlag(tickerSymbol: string, date: Date): Promise<boolean> {
+		const numberOfPricesToRetrieve = this.numOfDays * 2;
+
 		const results = await this.priceRepo.getLastXStockPrices({
 			startDate: date,
 			tickerSymbol,
-			numOfPrices: this.numOfDays * 2,
+			numOfPrices: numberOfPricesToRetrieve,
 		});
+
+		if (results.length < numberOfPricesToRetrieve) {
+			return false;
+		}
 
 		const precedingDays = results.slice(0, this.numOfDays);
 		const currDays = results.slice(this.numOfDays, this.numOfDays * 2);
