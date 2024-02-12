@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "aggregate": "npm run build && node dist/application/cron/aggregate-stocks/index.js",
+    "flag": "npm run build && node dist/application/cron/flag-stocks/index.js",
     "migrate": "NODE_ENV=staging knex migrate:up",
     "lint": "npx @biomejs/biome lint ./src",
     "format": "npx @biomejs/biome format --write ./src",
@@ -41,6 +42,10 @@
     "typescript": "^5.3.3"
   },
   "_moduleAliases": {
+    "@db": "dist/db",
+    "@domain": "dist/domain",
+    "@repository": "dist/repository",
+    "@service": "dist/service",
     "@utils": "dist/utils"
   }
 }

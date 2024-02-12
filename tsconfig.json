@@ -9,6 +9,10 @@
       "sourceMap": true,
       "baseUrl": "./src",
       "paths": {
+        "@domain/*": ["./domain/*"],
+        "@db/*": ["./db/*"],
+        "@repository/*": ["./repository/*"],
+        "@service/*": ["./service/*"],
         "@utils/*": ["./utils/*"]
       }
     },

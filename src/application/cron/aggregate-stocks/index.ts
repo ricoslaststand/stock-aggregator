@@ -6,27 +6,13 @@ import dayjs from "dayjs";
 import sleep from "sleep-promise";
 import yahooFinance from "yahoo-finance2";
 
-import knex from "knex";
-
-import config from "@utils/config";
+import db from "@db/index"
 
 type Stock = {
 	ticker_symbol: string;
 	name: string;
 	sector?: string;
 };
-
-const db = knex({
-	client: "postgres",
-	connection: {
-		host: "127.0.0.1",
-		port: 5432,
-		user: config.POSTGRES_USER,
-		password: config.POSTGRES_PASSWORD,
-		database: config.POSTGRES_DATABASE,
-	},
-	pool: { min: 0, max: 7 },
-});
 
 function getNumberOfDaysAgo(numOfDays: number): Date {
 	return dayjs().subtract(numOfDays).startOf("day").toDate();
