@@ -65,11 +65,13 @@ class PriceRepository {
 	async getAvgVolumeForLastXDays(
 		tickerSymbol: string,
 		numOfDays: number,
+		endDate: Date = new Date(),
 	): Promise<number> {
 		const result = await this.db(this.tableName)
 			.avg("volume")
 			.orderBy("date", "desc")
 			.where("ticker_symbol", tickerSymbol)
+			.andWhere("date <= ?", endDate)
 			.limit(numOfDays)
 			.first();
 

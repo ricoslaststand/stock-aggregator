@@ -9,9 +9,7 @@
     "migrate": "NODE_ENV=staging knex migrate:up",
     "lint": "npx @biomejs/biome lint ./src",
     "format": "npx @biomejs/biome format --write ./src",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky",
-    "precommit": "lint-staged"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
@@ -38,23 +36,8 @@
     "@types/papaparse": "^5.3.7",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
-    "husky": "^9.0.10",
     "jest": "^29.7.0",
-    "lint-staged": "^15.2.1",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"
-  },
-  "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --files-ignore-unknown=true",
-      "biome check --apply --no-errors-on-unmatched",
-      "biome check --apply --organize-imports-enabled=false --no-errors-on-unmatched",
-      "biome check --apply-unsafe --no-errors-on-unmatched",
-      "biome format --write --no-errors-on-unmatched",
-      "biome lint --apply --no-errors-on-unmatched"
-    ],
-    "*": [
-      "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
-    ]
   }
 }
