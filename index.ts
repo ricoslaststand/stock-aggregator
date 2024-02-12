@@ -6,7 +6,7 @@ import yahooFinance from "yahoo-finance2";
 
 import knex from "knex";
 
-import config from "./config";
+import config from "./src/config";
 
 type Stock = {
 	ticker_symbol: string;
@@ -86,6 +86,8 @@ async function main(): Promise<void> {
 					period1: startDate,
 					period2: endDate,
 				});
+				// getCalendarEvents('AAPL')
+				
 
 				await sleep(100);
 
@@ -150,9 +152,6 @@ async function getCalendarEvents(symbol: string) {
 	return results;
 }
 
-// getCalendarEvents('AAPL')
-
 // executeSQLQuery()
 
 main();
-// retrieveStockSymbols()

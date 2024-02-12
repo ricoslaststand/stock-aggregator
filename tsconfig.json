@@ -1,11 +1,16 @@
 {
     "compilerOptions": {
+      "esModuleInterop": true,
       "module": "commonjs",
       "noImplicitAny": true,
       "removeComments": true,
       "preserveConstEnums": true,
       "outDir": "dist",
-      "sourceMap": true
+      "sourceMap": true,
+      "baseUrl": "./src",
+      "paths": {
+        "@utils/*": ["./utils/*"]
+      }
     },
     "include": ["src/**/*"],
     "exclude": [
