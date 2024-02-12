@@ -48,10 +48,28 @@ class PriceRepository {
 		return result.map(this.formatItemToStockPrice);
 	}
 
-	async getAvgForLastXDays(numOfDays: number): Promise<number> {
+	async getAvgPriceForLastXDays(
+		tickerSymbol: string,
+		numOfDays: number,
+	): Promise<number> {
 		const result = await this.db(this.tableName)
 			.avg("close")
 			.orderBy("date", "desc")
+			.where("ticker_symbol", tickerSymbol)
+			.limit(numOfDays)
+			.first();
+
+		return result?.close || 0;
+	}
+
+	async getAvgVolumeForLastXDays(
+		tickerSymbol: string,
+		numOfDays: number,
+	): Promise<number> {
+		const result = await this.db(this.tableName)
+			.avg("volume")
+			.orderBy("date", "desc")
+			.where("ticker_symbol", tickerSymbol)
 			.limit(numOfDays)
 			.first();
 
