@@ -17,7 +17,7 @@ class StockRepository {
 			(result): Stock => ({
 				tickerSymbol: result.ticker_symbol,
 				name: result.name,
-				industry: result.industry,
+				industry: result.sector,
 			}),
 		);
 	}

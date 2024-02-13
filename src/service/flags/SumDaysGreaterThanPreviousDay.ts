@@ -1,4 +1,4 @@
-import PriceRepository from "../../repository/PriceRepository";
+import PriceRepository from "@repository/PriceRepository";
 import { IStockFlagChecker } from "../StockFlagChecker";
 
 export type SumDaysGreaterThanPreviousDayParams = {
@@ -54,7 +54,7 @@ export class SumDaysGreaterThanPreviousDay implements IStockFlagChecker {
 	}
 
 	public getReason(): string {
-		return "";
+		return `Sum of volume of ${this.numOfDays} days excees the sum of the previous ${this.numOfDays} days by ${this.margin}%.`;
 	}
 
 	private getPercentageIncrease(total: number, precedingTotal: number): number {

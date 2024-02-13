@@ -1,16 +1,21 @@
-import dayjs = require("dayjs");
+import dayjs from "dayjs";
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
-import PriceRepository from "../repository/PriceRepository";
-import StockRepository from "../repository/StockRepository";
-import { IStockFlagChecker } from "./StockFlagChecker";
+dayjs.extend(isSameOrBefore)
+
+import PriceRepository from "@repository/PriceRepository";
+import StockRepository from "@repository/StockRepository";
+import { IStockFlagChecker } from "@service/StockFlagChecker";
 
 class StockFlagger {
 	private priceRepo: PriceRepository;
 	private stockRepo: StockRepository;
 	private stockFlags: IStockFlagChecker[];
 
-	constructor(priceRepo: PriceRepository) {
+	constructor(priceRepo: PriceRepository, stockRepo: StockRepository, stockFlags: IStockFlagChecker[]) {
 		this.priceRepo = priceRepo;
+		this.stockRepo = stockRepo;
+		this.stockFlags = stockFlags;
 	}
 
 	async checkAllStocks(): Promise<void> {
@@ -31,14 +36,18 @@ class StockFlagger {
 						reasons += stockFlag.getReason();
 					}
 				}
+
+				console.log(`Stock ${tickerSymbol}, date: ${date.getUTCDate()}, reasons: ${reasons}`);
 			}
 		}
+
+		console.log(`Fetched ${stocks.length} stocks`);
 	}
 
 	private generateDateRange(): [Date, Date] {
 		const today = dayjs(new Date()).startOf("D");
 
-		const startDate = today.clone().subtract(180);
+		const startDate = today.clone().subtract(10);
 
 		return [startDate.toDate(), today.toDate()];
 	}
@@ -46,12 +55,12 @@ class StockFlagger {
 	private generateListOfDates(startDate: Date, endDate: Date): Date[] {
 		const results: Date[] = [];
 
-		const startDay = dayjs(startDate);
+		let startDay = dayjs(startDate);
 		const endDay = dayjs(endDate);
 
-		while (endDay.isBefore(startDay, "D") || endDay.isSame(endDay, "D")) {
+		while (startDay.isSameOrBefore(endDay, "d")) {
 			results.push(startDay.toDate());
-			startDay.add(1, "D");
+			startDay = startDay.add(1, "d");
 		}
 
 		return results;

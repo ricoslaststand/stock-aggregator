@@ -1,4 +1,4 @@
-import PriceRepository from "../../repository/PriceRepository";
+import PriceRepository from "@repository/PriceRepository";
 import { IStockFlagChecker } from "../StockFlagChecker";
 
 export type CurrDaysGreaterThanPreviousDayParams = {

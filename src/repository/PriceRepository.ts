@@ -1,7 +1,7 @@
 import { Dayjs } from "dayjs";
 import { Knex } from "knex";
 
-import { StockPrice } from "../domain/Stock";
+import { StockPrice } from "@domain/Stock";
 
 class PriceRepository {
 	private db: Knex;
@@ -28,8 +28,8 @@ class PriceRepository {
 
 		const result = await this.db(this.tableName)
 			.where("ticker_symbol", tickerSymbol)
-			.andWhereBetween("date", [params.startDate, params.endDate])
-			.orderBy("date", "asc");
+			.andWhereBetween("`date`", [params.startDate, params.endDate])
+			.orderBy("`date`", "asc");
 
 		return result.map(this.formatItemToStockPrice);
 	}
@@ -41,8 +41,8 @@ class PriceRepository {
 	}): Promise<StockPrice[]> {
 		const result = await this.db(this.tableName)
 			.where("ticker_symbol", params.tickerSymbol)
-			.andWhereRaw("date <= ?", [params.startDate])
-			.orderBy("date", "asc")
+			.where("date", "<=", params.startDate)
+			.orderBy("date", "desc")
 			.limit(params.numOfPrices);
 
 		return result.map(this.formatItemToStockPrice);
@@ -54,7 +54,7 @@ class PriceRepository {
 	): Promise<number> {
 		const result = await this.db(this.tableName)
 			.avg("close")
-			.orderBy("date", "desc")
+			.orderBy("`date`", "desc")
 			.where("ticker_symbol", tickerSymbol)
 			.limit(numOfDays)
 			.first();
@@ -68,14 +68,16 @@ class PriceRepository {
 		endDate: Date = new Date(),
 	): Promise<number> {
 		const result = await this.db(this.tableName)
-			.avg("volume")
-			.orderBy("date", "desc")
+			.select("date")
+			.avg("volume as volume")
 			.where("ticker_symbol", tickerSymbol)
-			.andWhere("date <= ?", endDate)
+			.andWhere("date", "<=", endDate)
+			.orderBy("date", "desc")
+			.groupBy("date")
 			.limit(numOfDays)
 			.first();
 
-		return result?.close || 0;
+		return result?.volume || 0;
 	}
 
 	private formatItemToStockPrice(item: any): StockPrice {
