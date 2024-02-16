@@ -54,10 +54,10 @@ export class SumDaysGreaterThanPreviousDay implements IStockFlagChecker {
 	}
 
 	public getReason(): string {
-		return `Sum of volume of ${this.numOfDays} days excees the sum of the previous ${this.numOfDays} days by ${this.margin}%.`;
+		return `Sum of volume of ${this.numOfDays} days exceeds the sum of the previous ${this.numOfDays} days by ${this.margin}%.`;
 	}
 
 	private getPercentageIncrease(total: number, precedingTotal: number): number {
-		return (100 * (total / precedingTotal)) / precedingTotal;
+		return (100 * (total / precedingTotal)) - 100;
 	}
 }

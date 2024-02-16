@@ -84,12 +84,12 @@ class PriceRepository {
 		return {
 			tickerSymbol: item.ticker_symbol,
 			date: item.date,
-			volume: item.volume,
-			high: item.high,
-			low: item.low,
-			open: item.open,
-			close: item.close,
-			adjClose: item.close,
+			volume: Number(item.volume),
+			high: Number(item.high),
+			low: Number(item.low),
+			open: Number(item.open),
+			close: Number(item.close),
+			adjClose: Number(item.close),
 		};
 	}
 }
