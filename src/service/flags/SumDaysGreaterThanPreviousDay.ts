@@ -58,6 +58,6 @@ export class SumDaysGreaterThanPreviousDay implements IStockFlagChecker {
 	}
 
 	private getPercentageIncrease(total: number, precedingTotal: number): number {
-		return (100 * (total / precedingTotal)) - 100;
+		return 100 * (total / precedingTotal) - 100;
 	}
 }

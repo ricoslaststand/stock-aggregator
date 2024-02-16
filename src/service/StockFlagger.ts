@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrBefore);
 
 import PriceRepository from "@repository/PriceRepository";
 import StockRepository from "@repository/StockRepository";
@@ -12,7 +12,11 @@ class StockFlagger {
 	private stockRepo: StockRepository;
 	private stockFlags: IStockFlagChecker[];
 
-	constructor(priceRepo: PriceRepository, stockRepo: StockRepository, stockFlags: IStockFlagChecker[]) {
+	constructor(
+		priceRepo: PriceRepository,
+		stockRepo: StockRepository,
+		stockFlags: IStockFlagChecker[],
+	) {
 		this.priceRepo = priceRepo;
 		this.stockRepo = stockRepo;
 		this.stockFlags = stockFlags;
@@ -23,36 +27,38 @@ class StockFlagger {
 		const [startDate, endDate] = this.generateDateRange();
 		const dates = this.generateListOfDates(startDate, endDate);
 
-		const hits = []
+		const hits = [];
 
 		for (const stock of stocks) {
 			const { tickerSymbol } = stock;
 
 			for (const date of dates) {
-				let reasons = [];
+				const reasons = [];
 
 				let meetsAllFlags = true;
 
 				for (const stockFlag of this.stockFlags) {
 					const isFlagged = await stockFlag.checkFlag(tickerSymbol, date);
 
-					meetsAllFlags = meetsAllFlags && isFlagged
+					meetsAllFlags = meetsAllFlags && isFlagged;
 
 					if (isFlagged) {
 						reasons.push(stockFlag.getReason());
 					}
 				}
 
-				console.log(`Meets ${reasons.length} reasons`)
+				console.log(`Meets ${reasons.length} reasons`);
 
-				const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format('MM/DD/YYYY')}, reasons: ${reasons.join(", ")}`
-				hits.push(str)
+				const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format(
+					"MM/DD/YYYY",
+				)}, reasons: ${reasons.join(", ")}`;
+				hits.push(str);
 
-				console.log(str)
+				console.log(str);
 
 				if (meetsAllFlags) {
 					// const str = `Stock ${tickerSymbol}, date: ${date.getUTCDate()}, reasons: ${reasons}`
-					hits.push(str)
+					hits.push(str);
 				}
 			}
 		}

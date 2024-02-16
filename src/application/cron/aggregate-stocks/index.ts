@@ -1,4 +1,4 @@
-import 'module-alias/register';
+import "module-alias/register";
 
 import PromisePool from "@supercharge/promise-pool/dist";
 import axios from "axios";
@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import sleep from "sleep-promise";
 import yahooFinance from "yahoo-finance2";
 
-import db from "@db/index"
+import db from "@db/index";
 
 type Stock = {
 	ticker_symbol: string;
@@ -75,7 +75,6 @@ async function main(): Promise<void> {
 					period2: endDate,
 				});
 				// getCalendarEvents('AAPL')
-				
 
 				await sleep(100);
 
