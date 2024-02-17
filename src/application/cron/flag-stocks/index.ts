@@ -2,7 +2,7 @@ import "module-alias/register";
 
 import Papa from "papaparse";
 
-import fs from 'fs';
+import fs from "fs";
 
 import db from "@db/index";
 import PriceRepository from "@repository/PriceRepository";
@@ -45,9 +45,9 @@ async function main() {
 
 	const hits = await stockFlagger.checkAllStocks();
 
-    const csvString = Papa.unparse(hits);
+	const csvString = Papa.unparse(hits);
 
-    fs.writeFileSync('stock_hits.csv', csvString)
+	fs.writeFileSync("stock_hits.csv", csvString);
 
 	console.log("Finishing flagging stocks!");
 }

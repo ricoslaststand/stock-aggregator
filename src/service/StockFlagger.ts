@@ -3,10 +3,10 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 dayjs.extend(isSameOrBefore);
 
+import { FlaggedStock } from "@domain/FlaggedStock";
 import PriceRepository from "@repository/PriceRepository";
 import StockRepository from "@repository/StockRepository";
 import { IStockFlagChecker } from "@service/StockFlagChecker";
-import { FlaggedStock } from "@domain/FlaggedStock";
 
 class StockFlagger {
 	private priceRepo: PriceRepository;
@@ -57,7 +57,7 @@ class StockFlagger {
 					name: stock.name,
 					tickerSymbol,
 					date: dayjs(date).format("MM/DD/YYYY"),
-					reasons: reasons.join(", ")
+					reasons: reasons.join(", "),
 				});
 
 				// console.log(str);
@@ -73,7 +73,7 @@ class StockFlagger {
 
 		console.log(`Fetched ${stocks.length} stocks`);
 
-		return hits
+		return hits;
 	}
 
 	private generateDateRange(): [Date, Date] {
