@@ -6,6 +6,7 @@ dayjs.extend(isSameOrBefore);
 import PriceRepository from "@repository/PriceRepository";
 import StockRepository from "@repository/StockRepository";
 import { IStockFlagChecker } from "@service/StockFlagChecker";
+import { FlaggedStock } from "@domain/FlaggedStock";
 
 class StockFlagger {
 	private priceRepo: PriceRepository;
@@ -22,12 +23,12 @@ class StockFlagger {
 		this.stockFlags = stockFlags;
 	}
 
-	async checkAllStocks(): Promise<void> {
+	async checkAllStocks(): Promise<FlaggedStock[]> {
 		const stocks = await this.stockRepo.getStocks();
 		const [startDate, endDate] = this.generateDateRange();
 		const dates = this.generateListOfDates(startDate, endDate);
 
-		const hits = [];
+		const hits: FlaggedStock[] = [];
 
 		for (const stock of stocks) {
 			const { tickerSymbol } = stock;
@@ -49,23 +50,30 @@ class StockFlagger {
 
 				console.log(`Meets ${reasons.length} reasons`);
 
-				const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format(
-					"MM/DD/YYYY",
-				)}, reasons: ${reasons.join(", ")}`;
-				hits.push(str);
+				// const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format(
+				// 	"MM/DD/YYYY",
+				// )}, reasons: ${reasons.join(", ")}`;
+				hits.push({
+					name: stock.name,
+					tickerSymbol,
+					date: dayjs(date).format("MM/DD/YYYY"),
+					reasons: reasons.join(", ")
+				});
 
-				console.log(str);
+				// console.log(str);
 
-				if (meetsAllFlags) {
-					// const str = `Stock ${tickerSymbol}, date: ${date.getUTCDate()}, reasons: ${reasons}`
-					hits.push(str);
-				}
+				// if (meetsAllFlags) {
+				// 	// const str = `Stock ${tickerSymbol}, date: ${date.getUTCDate()}, reasons: ${reasons}`
+				// 	hits.push(str);
+				// }
 			}
 		}
 
 		console.log(`# of hits: ${hits.length}`);
 
 		console.log(`Fetched ${stocks.length} stocks`);
+
+		return hits
 	}
 
 	private generateDateRange(): [Date, Date] {

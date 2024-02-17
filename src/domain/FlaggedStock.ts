@@ -1,6 +1,6 @@
 export interface FlaggedStock {
+	name: string;
 	tickerSymbol: string;
-	date: Date;
-	close: number;
-	reasons: string[];
+	date: string;
+	reasons: string;
 }
