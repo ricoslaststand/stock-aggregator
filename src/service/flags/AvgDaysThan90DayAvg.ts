@@ -1,5 +1,5 @@
 import PriceRepository from "@repository/PriceRepository";
-import { IStockFlagChecker } from "../StockFlagChecker";
+import { IStockFlagChecker } from "@service/StockFlagChecker";
 
 export type AvgDaysThan90DaysAvgParams = {
 	margin: number;
