@@ -50,28 +50,20 @@ class StockFlagger {
 
 				console.log(`Meets ${reasons.length} reasons`);
 
-				const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format(
-					"MM/DD/YYYY",
-				)}, reasons: ${reasons.join(", ")}`;
-				hits.push({
-					name: stock.name,
-					tickerSymbol,
-					date: dayjs(date).format("MM/DD/YYYY"),
-					reasons: reasons.join(", "),
-				});
+				const str = `Stock ${tickerSymbol}, currDay: ${date.getDay()} date: ${dayjs(
+					date,
+				).format("MM/DD/YYYY")}, reasons: ${reasons.join(", ")}`;
 
-				console.log(str);
-
-				// if (meetsAllFlags) {
-				// 	// const str = `Stock ${tickerSymbol}, date: ${date.getUTCDate()}, reasons: ${reasons}`
-				// 	hits.push(str);
-				// }
+				if (meetsAllFlags) {
+					hits.push({
+						name: stock.name,
+						tickerSymbol,
+						date: dayjs(date).format("MM/DD/YYYY"),
+						reasons: reasons.join(", "),
+					});
+				}
 			}
 		}
-
-		console.log(`# of hits: ${hits.length}`);
-
-		console.log(`Fetched ${stocks.length} stocks`);
 
 		return hits;
 	}
@@ -90,7 +82,10 @@ class StockFlagger {
 
 		while (results.length <= numOfDays) {
 			if (!includeWeekend) {
-				while (currDay.day() in [DayOfWeek.Sunday, DayOfWeek.Saturday]) {
+				while (
+					currDay.day() === DayOfWeek.Sunday ||
+					currDay.day() === DayOfWeek.Saturday
+				) {
 					currDay = currDay.subtract(1, "d");
 				}
 			}
