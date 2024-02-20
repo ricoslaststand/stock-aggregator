@@ -50,6 +50,8 @@ async function main() {
 	fs.writeFileSync("stock_hits.csv", csvString);
 
 	console.log("Finishing flagging stocks!");
+
+	process.exit();
 }
 
 main();
