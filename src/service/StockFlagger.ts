@@ -3,6 +3,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 dayjs.extend(isSameOrBefore);
 
+import { DayOfWeek } from "@domain/Date";
 import { FlaggedStock } from "@domain/FlaggedStock";
 import PriceRepository from "@repository/PriceRepository";
 import StockRepository from "@repository/StockRepository";
@@ -25,8 +26,7 @@ class StockFlagger {
 
 	async checkAllStocks(): Promise<FlaggedStock[]> {
 		const stocks = await this.stockRepo.getStocks();
-		const [startDate, endDate] = this.generateDateRange();
-		const dates = this.generateListOfDates(startDate, endDate);
+		const dates = this.generateLastXDays(20, false);
 
 		const hits: FlaggedStock[] = [];
 
@@ -78,10 +78,28 @@ class StockFlagger {
 
 	private generateDateRange(): [Date, Date] {
 		const today = dayjs(new Date()).startOf("d");
-
 		const startDate = today.clone().subtract(20, "d");
 
 		return [startDate.toDate(), today.toDate()];
+	}
+
+	private generateLastXDays(numOfDays: number, includeWeekend = false): Date[] {
+		const results: Date[] = [];
+
+		let currDay = dayjs().startOf("day");
+
+		while (results.length <= numOfDays) {
+			if (!includeWeekend) {
+				while (currDay.day() in [DayOfWeek.Sunday, DayOfWeek.Saturday]) {
+					currDay = currDay.subtract(1, "d");
+				}
+			}
+
+			results.push(currDay.clone().toDate());
+			currDay = currDay.subtract(1, "d");
+		}
+
+		return results.reverse();
 	}
 
 	private generateListOfDates(startDate: Date, endDate: Date): Date[] {
