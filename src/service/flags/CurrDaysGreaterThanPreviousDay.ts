@@ -30,8 +30,9 @@ export class CurrDaysGreaterThanPreviousDay implements IStockFlagChecker {
 			return false;
 		}
 
-		const precedingDays = results.slice(0, this.numOfDays);
-		const currDays = results.slice(this.numOfDays, this.numOfDays * 2);
+		// Days are returned most recent to least recent
+		const currDays = results.slice(0, this.numOfDays);
+		const precedingDays = results.slice(this.numOfDays, this.numOfDays * 2);
 
 		for (const day of currDays) {
 			for (const prevDay of precedingDays) {

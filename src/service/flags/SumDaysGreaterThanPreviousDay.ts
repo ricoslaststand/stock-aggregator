@@ -35,8 +35,8 @@ export class SumDaysGreaterThanPreviousDay implements IStockFlagChecker {
 			return false;
 		}
 
-		const precedingDays = results.slice(0, this.numOfDays);
-		const currDays = results.slice(this.numOfDays, this.numOfDays * 2);
+		const currDays = results.slice(0, this.numOfDays);
+		const precedingDays = results.slice(this.numOfDays, this.numOfDays * 2);
 
 		const precedingDaysVolumeSum = precedingDays.reduce(
 			(total, price) => total + price.volume,

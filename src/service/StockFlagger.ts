@@ -50,9 +50,9 @@ class StockFlagger {
 
 				console.log(`Meets ${reasons.length} reasons`);
 
-				// const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format(
-				// 	"MM/DD/YYYY",
-				// )}, reasons: ${reasons.join(", ")}`;
+				const str = `Stock ${tickerSymbol}, date: ${dayjs(date).format(
+					"MM/DD/YYYY",
+				)}, reasons: ${reasons.join(", ")}`;
 				hits.push({
 					name: stock.name,
 					tickerSymbol,
@@ -60,7 +60,7 @@ class StockFlagger {
 					reasons: reasons.join(", "),
 				});
 
-				// console.log(str);
+				console.log(str);
 
 				// if (meetsAllFlags) {
 				// 	// const str = `Stock ${tickerSymbol}, date: ${date.getUTCDate()}, reasons: ${reasons}`
@@ -79,7 +79,7 @@ class StockFlagger {
 	private generateDateRange(): [Date, Date] {
 		const today = dayjs(new Date()).startOf("d");
 
-		const startDate = today.clone().subtract(10, "d");
+		const startDate = today.clone().subtract(20, "d");
 
 		return [startDate.toDate(), today.toDate()];
 	}
