@@ -12,6 +12,11 @@ import StockFlagger from "@service/StockFlagger";
 import { AvgDaysThan90DaysAvg } from "@service/flags/AvgDaysThan90DayAvg";
 import { CurrDaysGreaterThanPreviousDay } from "@service/flags/CurrDaysGreaterThanPreviousDay";
 import { SumDaysGreaterThanPreviousDay } from "@service/flags/SumDaysGreaterThanPreviousDay";
+import dayjs from "dayjs";
+
+function createFilename(): string {
+	return `stock_hits_${dayjs().format("YYYY-MM-DDTHH:mm:ssZ[Z]")}.csv`;
+}
 
 async function main() {
 	console.log("Starting to flag stocks...");
@@ -47,7 +52,7 @@ async function main() {
 
 	const csvString = Papa.unparse(hits);
 
-	fs.writeFileSync("stock_hits.csv", csvString);
+	fs.writeFileSync(createFilename(), csvString);
 
 	console.log("Finishing flagging stocks!");
 

@@ -24,6 +24,7 @@
     "module-alias": "^2.2.3",
     "papaparse": "^5.4.1",
     "pg": "^8.10.0",
+    "pino": "^8.19.0",
     "sleep-promise": "^9.1.0",
     "sqlite3": "^5.1.6",
     "yahoo-finance2": "^2.3.10"

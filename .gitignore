@@ -129,4 +129,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-stock_hits.csv
+stock_hits*.csv

@@ -9,6 +9,8 @@ import PriceRepository from "@repository/PriceRepository";
 import StockRepository from "@repository/StockRepository";
 import { IStockFlagChecker } from "@service/StockFlagChecker";
 
+import logger from "@utils/Logger";
+
 class StockFlagger {
 	private priceRepo: PriceRepository;
 	private stockRepo: StockRepository;
@@ -48,13 +50,15 @@ class StockFlagger {
 					}
 				}
 
-				console.log(`Meets ${reasons.length} reasons`);
-
-				const str = `Stock ${tickerSymbol}, currDay: ${date.getDay()} date: ${dayjs(
-					date,
-				).format("MM/DD/YYYY")}, reasons: ${reasons.join(", ")}`;
+				logger.info(`Meets ${reasons.length} reasons`);
 
 				if (meetsAllFlags) {
+					const str = `Stock ${tickerSymbol}, currDay: ${date.getDay()} date: ${dayjs(
+						date,
+					).format("MM/DD/YYYY")}, reasons: ${reasons.join(", ")}`;
+
+					logger.info(str);
+
 					hits.push({
 						name: stock.name,
 						tickerSymbol,
