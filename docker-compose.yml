@@ -1,8 +1,10 @@
 services:
   db:
-    image: postgres:16.1-alpine
+    image: postgres:16.2-alpine
     restart: always
     environment:
+      - TZ=UTC
+      - PGTZ=UTC
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     ports:

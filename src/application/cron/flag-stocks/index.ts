@@ -14,12 +14,14 @@ import { CurrDaysGreaterThanPreviousDay } from "@service/flags/CurrDaysGreaterTh
 import { SumDaysGreaterThanPreviousDay } from "@service/flags/SumDaysGreaterThanPreviousDay";
 import dayjs from "dayjs";
 
+import Logger from "@utils/Logger";
+
 function createFilename(): string {
 	return `stock_hits_${dayjs().format("YYYY-MM-DDTHH:mm:ssZ[Z]")}.csv`;
 }
 
 async function main() {
-	console.log("Starting to flag stocks...");
+	Logger.info("Starting to flag stocks...");
 
 	const priceRepo = new PriceRepository(db);
 	const stockRepo = new StockRepository(db);
@@ -54,7 +56,7 @@ async function main() {
 
 	fs.writeFileSync(createFilename(), csvString);
 
-	console.log("Finishing flagging stocks!");
+	Logger.info("Finishing flagging stocks!");
 
 	process.exit();
 }

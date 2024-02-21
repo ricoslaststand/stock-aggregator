@@ -7,12 +7,15 @@ import sleep from "sleep-promise";
 import yahooFinance from "yahoo-finance2";
 
 import db from "@db/index";
+import Logger from "@utils/Logger";
 
 type Stock = {
 	ticker_symbol: string;
 	name: string;
 	sector?: string;
 };
+
+const DEFAULT_NUM_OF_DAYS = 1;
 
 function getNumberOfDaysAgo(numOfDays: number): Date {
 	return dayjs().subtract(numOfDays).startOf("day").toDate();
@@ -56,8 +59,19 @@ async function main(): Promise<void> {
 		const stockSymbols = await retrieveStockSymbols();
 		await insertStockSymbols(addIndexes(stockSymbols));
 
-		const startDate = "2023-09-01";
-		const endDate = "2024-04-05";
+		let numOfDays = DEFAULT_NUM_OF_DAYS;
+
+		const numOfDaysIdx = process.argv.indexOf("--numOfDays");
+		if (numOfDaysIdx > -1) {
+			const argVal = Number(process.argv[numOfDaysIdx + 1]);
+
+			if (!Number.isNaN(argVal) && argVal > 0) {
+				numOfDays = argVal;
+			}
+		}
+
+		const endDate = dayjs();
+		const startDate = endDate.subtract(numOfDays, "d").startOf("d");
 
 		await PromisePool.withConcurrency(1)
 			.for(stockSymbols)
@@ -69,22 +83,23 @@ async function main(): Promise<void> {
 			.handleError((err, stock) => {
 				console.log(`Error failed for ${stock.ticker_symbol}: ${err.message}`);
 			})
-			.process(async (stock, index) => {
+			.process(async (stock) => {
 				const results = await yahooFinance.historical(stock.ticker_symbol, {
-					period1: startDate,
-					period2: endDate,
+					period1: startDate.toDate(),
+					period2: endDate.toDate(),
 				});
 				// getCalendarEvents('AAPL')
 
 				await sleep(100);
-
 				const formattedResults = results.map((dayPrice) => {
 					dayPrice.adj_close = dayPrice.adjClose;
-					delete dayPrice.adjClose;
+					dayPrice.adjClose = undefined;
 
 					return {
-						ticker_symbol: stock.ticker_symbol,
 						...dayPrice,
+						// TODO: fix this hack to ensure that data is stored as date when in UTC time instead of local
+						date: dayjs(dayPrice.date).add(23, "h").toDate(),
+						ticker_symbol: stock.ticker_symbol,
 					};
 				});
 
@@ -94,12 +109,16 @@ async function main(): Promise<void> {
 						.onConflict(["ticker_symbol", "date"])
 						.ignore();
 				} catch (err) {
-					console.log(err);
-					console.log("formattedResults");
+					Logger.error(err);
+					Logger.info({
+						formattedResults,
+					});
 				}
 			});
-	} catch (e) {
-		console.log(e);
+
+		process.exit();
+	} catch (err) {
+		Logger.error(err);
 	}
 }
 
